@@ -12,13 +12,18 @@ mongoose.connect(MONGO_CONNECTION_STRING, {useNewUrlParser: true, useUnifiedTopo
         });
 
 const {
-    routes: userRoutes,
-} = require('./user/routes');
+    routes: indexRouter,
+} = require('./routes');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ exposedHeaders: ['X-Token', 'X-Powered-By'] }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json());
-app.use('/user', userRoutes);
+app.use(bodyParser.json({ limit: '50mb',}),)
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, }),)
 
+app.use('/api/v1/', indexRouter);
+    
 module.exports = app;
